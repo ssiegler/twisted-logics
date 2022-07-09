@@ -1,17 +1,14 @@
 <script>
     import NumberInput from "./lib/NumberInput.svelte";
+    import {inputs} from "./lib/inputs.js";
 
-    const inputs = ['rate', 'base', 'percentage']
     let rate;
     let base;
     let percentage;
-    let lastInput;
-    let prevInput;
 
-    function computeOutput() {
-        if (lastInput && prevInput && lastInput !== prevInput) {
-            const output = inputs.filter(input => input !== lastInput && input !== prevInput)[0];
-            switch (output) {
+    $: {
+        if ($inputs.length >= 2) {
+            switch (['rate', 'base', 'percentage'].filter(item => !$inputs.slice(0,2).includes(item))[0]) {
                 case 'rate':
                     rate = 100 * percentage / base;
                     break;
@@ -25,42 +22,28 @@
         }
     }
 
-    function setInput(input) {
-        if (input !== lastInput) {
-            prevInput = lastInput;
-            lastInput = input;
-        }
-
-        computeOutput();
-    }
-
-    function reset() {
-        lastInput = undefined;
-        prevInput = undefined;
-    }
-
 </script>
 
 <main>
     <nav>
         <h1>Prozentrechner</h1>
-        <input form="form" type="reset" on:click="{() => reset()}" value="&#x21bb;" title="Zurücksetzen"/>
+        <input form="form" type="reset" on:click="{() => inputs.reset()}" value="&#x21bb;" title="Zurücksetzen"/>
     </nav>
 
     <form id="form">
         <label>
             <span></span>
-            <NumberInput bind:number={rate} on:input="{() => setInput('rate')}"/>
+            <NumberInput bind:number={rate} on:input="{() => inputs.add('rate')}"/>
             <span> %</span>
         </label>
         <label>
             <span>von</span>
-            <NumberInput bind:number={base} on:input="{() => setInput('base')}"/>
+            <NumberInput bind:number={base} on:input="{() => inputs.add('base')}"/>
             <span></span>
         </label>
         <label>
             <span>sind</span>
-            <NumberInput bind:number={percentage} on:input="{() => setInput('percentage')}"/>
+            <NumberInput bind:number={percentage} on:input="{() => inputs.add('percentage')}"/>
             <span></span>
         </label>
     </form>
