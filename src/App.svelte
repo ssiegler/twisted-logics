@@ -1,5 +1,6 @@
 <script>
-    import {NumberParser} from './lib/NumberParser.js'
+    import NumberInput from "./lib/NumberInput.svelte";
+
     const inputs = ['rate', 'base', 'percentage']
     let rate;
     let base;
@@ -7,42 +8,18 @@
     let lastInput;
     let prevInput;
 
-    function calculateRate() {
-        return 100 * percentageValue() / baseValue();
-    }
-
-    function calculateBase() {
-        return percentageValue() / rateValue();
-    }
-
-    function calculatePercentage() {
-        return baseValue() * rateValue();
-    }
-
-    function rateValue() {
-        return new NumberParser().parse(rate) / 100;
-    }
-
-    function baseValue() {
-        return new NumberParser().parse(base);
-    }
-
-    function percentageValue() {
-        return new NumberParser().parse(percentage);
-    }
-
     function computeOutput() {
         if (lastInput && prevInput && lastInput !== prevInput) {
             const output = inputs.filter(input => input !== lastInput && input !== prevInput)[0];
             switch (output) {
                 case 'rate':
-                    rate = new Intl.NumberFormat().format(calculateRate());
+                    rate = 100 * percentage / base;
                     break;
                 case 'base':
-                    base = new Intl.NumberFormat().format(calculateBase());
+                    base = percentage / (rate / 100);
                     break;
                 case 'percentage':
-                    percentage = new Intl.NumberFormat().format(calculatePercentage());
+                    percentage = base * (rate / 100);
                     break;
             }
         }
@@ -73,20 +50,17 @@
     <form id="form">
         <label>
             <span></span>
-            <input type="text" inputmode="decimal" size="10" step="any" bind:value={rate}
-                   on:input="{() => setInput('rate')}"/>
+            <NumberInput bind:number={rate} on:input="{() => setInput('rate')}"/>
             <span> %</span>
         </label>
         <label>
             <span>von</span>
-            <input type="text" inputmode="decimal" size="10" step="any" bind:value={base}
-                   on:input="{() => setInput('base')}"/>
+            <NumberInput bind:number={base} on:input="{() => setInput('base')}"/>
             <span></span>
         </label>
         <label>
             <span>sind</span>
-            <input type="text" inputmode="decimal" size="10" step="any" bind:value={percentage}
-                   on:input="{() => setInput('percentage')}"/>
+            <NumberInput bind:number={percentage} on:input="{() => setInput('percentage')}"/>
             <span></span>
         </label>
     </form>
@@ -128,8 +102,6 @@
     input, label span {
         text-align: right;
         display: table-cell;
-        font-size: 1em;
     }
-
 
 </style>
