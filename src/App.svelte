@@ -57,12 +57,17 @@
         computeOutput();
     }
 
+    function reset() {
+        lastInput = undefined;
+        prevInput = undefined;
+    }
+
 </script>
 
 <main>
     <nav>
         <h1>Prozentrechner</h1>
-        <input form="form" type="reset" value="&#x21bb;" title="Zurücksetzen"/>
+        <input form="form" type="reset" on:click="{() => reset()}" value="&#x21bb;" title="Zurücksetzen"/>
     </nav>
 
     <form id="form">
