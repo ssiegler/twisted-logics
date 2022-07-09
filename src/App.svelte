@@ -1,6 +1,7 @@
 <script>
-    import NumberInput from "./lib/NumberInput.svelte";
     import {inputs} from "./lib/inputs.js";
+    import NumberInput from "./lib/NumberInput.svelte";
+    import ResetButton from "./lib/ResetButton.svelte";
 
     let rate;
     let base;
@@ -8,7 +9,7 @@
 
     $: {
         if ($inputs.length >= 2) {
-            switch (['rate', 'base', 'percentage'].filter(item => !$inputs.slice(0,2).includes(item))[0]) {
+            switch (['rate', 'base', 'percentage'].filter(item => !$inputs.slice(0, 2).includes(item))[0]) {
                 case 'rate':
                     rate = 100 * percentage / base;
                     break;
@@ -27,28 +28,28 @@
 <main>
     <nav>
         <h1>Prozentrechner</h1>
-        <input form="form" type="reset" on:click="{() => inputs.reset()}" value="&#x21bb;" title="Zurücksetzen"/>
+        <ResetButton/>
     </nav>
-
-    <form id="form">
+    <form>
         <label>
             <span></span>
-            <NumberInput bind:number={rate} on:input="{() => inputs.add('rate')}"/>
+            <NumberInput bind:number={rate} name="rate"/>
             <span> %</span>
         </label>
         <label>
             <span>von</span>
-            <NumberInput bind:number={base} on:input="{() => inputs.add('base')}"/>
+            <NumberInput bind:number={base} name="base"/>
             <span></span>
         </label>
         <label>
             <span>sind</span>
-            <NumberInput bind:number={percentage} on:input="{() => inputs.add('percentage')}"/>
+            <NumberInput bind:number={percentage} name="percentage"/>
             <span></span>
         </label>
-    </form>
 
+    </form>
 </main>
+
 
 <style>
     :root {

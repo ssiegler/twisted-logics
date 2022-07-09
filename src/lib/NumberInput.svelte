@@ -1,23 +1,28 @@
 <script>
     import {NumberParser} from "./NumberParser.js";
-    import {createEventDispatcher} from "svelte";
+    import {inputs} from "./inputs.js";
 
     const parser = new NumberParser("de");
     const formatter = new Intl.NumberFormat("de", {maximumFractionDigits: 5});
-    const dispatch = createEventDispatcher();
 
     export let number = undefined;
+    export let name;
 
     let value;
 
     $: value = Number.isFinite(number) ? formatter.format(number) : "";
 
+    $: {
+        if ($inputs.length === 0) {
+            value = "";
+        }
+    }
 
     function parse() {
         value = value.replace(/[^0-9,.]/, '');
         const parsed = parser.parse(value);
         number = Number.isFinite(parsed) ? parsed : undefined;
-        dispatch('input', number);
+        inputs.add(name);
     }
 </script>
 
