@@ -1,53 +1,33 @@
 <script>
-    import {inputs} from "./lib/inputs.js";
-    import NumberInput from "./lib/NumberInput.svelte";
     import ResetButton from "./lib/ResetButton.svelte";
+    import Prozentsatz from "./lib/Prozentsatz.svelte";
 
-    let rate;
-    let base;
-    let percentage;
+    const apps = [
+        {name: "Prozentrechner", component: Prozentsatz},
+    ];
 
-    $: {
-        if ($inputs.length >= 2) {
-            switch (['rate', 'base', 'percentage'].filter(item => !$inputs.slice(0, 2).includes(item))[0]) {
-                case 'rate':
-                    rate = 100 * percentage / base;
-                    break;
-                case 'base':
-                    base = percentage / (rate / 100);
-                    break;
-                case 'percentage':
-                    percentage = base * (rate / 100);
-                    break;
-            }
-        }
-    }
+    let selected = apps[0];
+    let open = false;
 
 </script>
 
 <main>
-    <nav>
-        <h1>Prozentrechner</h1>
+    <header>
+        <button title="Anwendung wählen" on:click="{() => open=!open}">≡</button>
+        <nav>
+        <h1 title="Anwendung wählen" on:click="{() => open=!open}" >{selected.name}</h1>
+        <ul class:open>
+            {#each apps.filter((app) => app !== selected) as app}
+                <li on:click={() => {selected = app; open = false;}}>{app.name}</li>
+            {/each}
+        </ul>
+        </nav>
         <ResetButton/>
-    </nav>
-    <form>
-        <label>
-            <span></span>
-            <NumberInput bind:number={rate} name="rate"/>
-            <span> %</span>
-        </label>
-        <label>
-            <span>von</span>
-            <NumberInput bind:number={base} name="base"/>
-            <span></span>
-        </label>
-        <label>
-            <span>sind</span>
-            <NumberInput bind:number={percentage} name="percentage"/>
-            <span></span>
-        </label>
+    </header>
 
-    </form>
+    {#if !open}
+        <svelte:component this={selected.component}/>
+    {/if}
 </main>
 
 
@@ -57,35 +37,55 @@
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
-    nav {
-        vertical-align: baseline;
-    }
-
-    nav * {
-        margin: 1ex;
-        display: inline-block;
-    }
-
     main {
         text-align: center;
         padding: 1em;
         margin: 0 auto;
     }
 
-    form {
+    header {
+        font-size: large;
+        font-weight: bold;
+        display: inline-flex;
         margin: auto;
-        display: table;
-        border-collapse: separate;
-        border-spacing: 1ex;
+        align-items: baseline;
+        justify-content: space-between;
     }
 
-    label {
-        display: table-row;
+    button {
+        font-size: 1.5em;
+        width: 1.5em;
+        height: 1.5em;
     }
 
-    input, label span {
-        text-align: right;
-        display: table-cell;
+    h1 {
+        font-size: unset;
     }
 
+    ul {
+        list-style-type: none;
+        position: relative;
+        height: 0;
+        margin: 0;
+        padding: 0;
+        visibility: hidden;
+        overflow: hidden;
+    }
+
+    h1, li {
+        margin: 1ex 0;
+        padding: 0 1ex;
+        display: block;
+        height: 1.5em;
+    }
+
+    h1:hover, li:hover {
+        text-decoration: underline;
+    }
+
+    .open {
+        visibility: visible;
+        overflow: visible;
+        height: auto;
+    }
 </style>
