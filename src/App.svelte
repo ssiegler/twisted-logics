@@ -1,9 +1,11 @@
 <script>
     import ResetButton from "./lib/ResetButton.svelte";
     import Prozentsatz from "./lib/Prozentsatz.svelte";
+    import Rabatt from "./lib/Rabatt.svelte";
 
     const apps = [
         {name: "Prozentrechner", component: Prozentsatz},
+        {name: "Rabatt", component: Rabatt},
     ];
 
     let selected = apps[0];
