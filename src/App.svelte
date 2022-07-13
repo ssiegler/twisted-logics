@@ -1,7 +1,7 @@
 <script>
-    import ResetButton from "./lib/ResetButton.svelte";
     import Prozentsatz from "./lib/Prozentsatz.svelte";
     import Rabatt from "./lib/Rabatt.svelte";
+    import {inputs} from "./lib/inputs.js";
 
     const apps = [
         {name: "Prozentrechner", component: Prozentsatz},
@@ -17,14 +17,14 @@
     <header>
         <button title="Anwendung wählen" on:click="{() => open=!open}">≡</button>
         <nav>
-        <h1 title="Anwendung wählen" on:click="{() => open=!open}" >{selected.name}</h1>
-        <ul class:open>
-            {#each apps.filter((app) => app !== selected) as app}
-                <li on:click={() => {selected = app; open = false;}}>{app.name}</li>
-            {/each}
-        </ul>
+            <h1 title="Anwendung wählen" on:click="{() => open=!open}">{selected.name}</h1>
+            <ul class:open>
+                {#each apps.filter((app) => app !== selected) as app}
+                    <li on:click={() => {selected = app; open = false; inputs.reset()}}>{app.name}</li>
+                {/each}
+            </ul>
         </nav>
-        <ResetButton/>
+        <button title="Eingaben Zurücksetzen" on:click="{inputs.reset}" class:open>&#x21bb;</button>
     </header>
 
     {#if !open}
@@ -58,6 +58,7 @@
         font-size: 1.5em;
         width: 1.5em;
         height: 1.5em;
+        text-align: center;
     }
 
     h1 {
@@ -85,9 +86,14 @@
         text-decoration: underline;
     }
 
-    .open {
+    ul.open {
         visibility: visible;
         overflow: visible;
         height: auto;
     }
+
+    button.open {
+        visibility: hidden;
+    }
+
 </style>
