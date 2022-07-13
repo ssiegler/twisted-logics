@@ -18,15 +18,19 @@
         }
     }
 
-    function parse() {
-        value = value.replace(/[^0-9,.]/, '');
-        const parsed = parser.parse(value);
-        number = Number.isFinite(parsed) ? parsed : undefined;
-        inputs.add(name);
+    function parse(event) {
+        event.target.value = event.target.value.replace(/[^0-9,.]/, '');
+        const parsed = parser.parse(event.target.value);
+        if (Number.isFinite(parsed)) {
+            number = parsed;
+            inputs.add(name);
+        } else {
+            number = null;
+        }
     }
 </script>
 
-<input type="text" inputmode="decimal" size="10" bind:value on:input={parse}/>
+<input type="text" inputmode="decimal" size="10" on:input={parse} bind:value />
 
 <style>
     input {
