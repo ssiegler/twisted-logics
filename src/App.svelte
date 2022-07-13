@@ -11,7 +11,7 @@
     ];
 
     let selected = apps[0];
-    let open = false;
+    let open = true;
 
 </script>
 
