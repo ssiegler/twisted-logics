@@ -42,17 +42,15 @@
     }
 
     function replaceMargin(inputs) {
-        const indexOfMargin = inputs.indexOf('margin');
-        if (indexOfMargin >= 0) {
-            const indexOfMarkup = inputs.indexOf('markup');
-            if (indexOfMargin < indexOfMarkup) {
-                inputs[indexOfMargin] = 'markup';
-                delete inputs[indexOfMarkup];
-            } else {
-                delete inputs[indexOfMargin];
+        console.log("replacing", inputs);
+        const indices = [inputs.indexOf('margin'), inputs.indexOf('markup')].filter((i) => i >= 0).sort();
+        if (indices.length > 0 ) {
+            inputs[indices[0]] = 'markup';
+            if (indices.length > 1 ) {
+                inputs.splice(indices[1], 1);
             }
         }
-
+        console.log("replaced", inputs);
     }
 
     function onInput(inputs) {
