@@ -1,11 +1,13 @@
 <script>
+    import {inputs} from "./lib/inputs.js";
     import Prozentsatz from "./lib/Prozentsatz.svelte";
     import Rabatt from "./lib/Rabatt.svelte";
-    import {inputs} from "./lib/inputs.js";
+    import Aufschlag from "./lib/Aufschlag.svelte";
 
     const apps = [
         {name: "Prozentrechner", component: Prozentsatz},
         {name: "Rabatt", component: Rabatt},
+        {name: "Aufschlag", component: Aufschlag},
     ];
 
     let selected = apps[0];
